@@ -546,41 +546,79 @@ switch:
     bitmask: 16 # Bit 4: CH Mode
     icon: "mdi:alpha-c-box"
 
+# Master switch to control Grid Charge across all 6 time points
   - platform: template
-    name: "Time of Use All Charge Enable"
-    id: switch_time_of_use_all_charge_enable
-    icon: "mdi:battery-plus"
+    name: "Time of Use All Grid Charge Enable"
+    id: switch_time_of_use_all_grid_charge_enable
+    icon: "mdi:transmission-tower"
     optimistic: true
     restore_mode: DISABLED
     disabled_by_default: true
     lambda: |-
-      return id(switch_time_point_1_charge_enable).state;
+      return id(switch_time_point_1_grid_charge_enable).state;
     turn_on_action:
       - switch.turn_on:
-          id: switch_time_point_1_charge_enable
+          id: switch_time_point_1_grid_charge_enable
       - switch.turn_on:
-          id: switch_time_point_2_charge_enable
+          id: switch_time_point_2_grid_charge_enable
       - switch.turn_on:
-          id: switch_time_point_3_charge_enable
+          id: switch_time_point_3_grid_charge_enable
       - switch.turn_on:
-          id: switch_time_point_4_charge_enable
+          id: switch_time_point_4_grid_charge_enable
       - switch.turn_on:
-          id: switch_time_point_5_charge_enable
+          id: switch_time_point_5_grid_charge_enable
       - switch.turn_on:
-          id: switch_time_point_6_charge_enable
+          id: switch_time_point_6_grid_charge_enable
     turn_off_action:
       - switch.turn_off:
-          id: switch_time_point_1_charge_enable
+          id: switch_time_point_1_grid_charge_enable
       - switch.turn_off:
-          id: switch_time_point_2_charge_enable
+          id: switch_time_point_2_grid_charge_enable
       - switch.turn_off:
-          id: switch_time_point_3_charge_enable
+          id: switch_time_point_3_grid_charge_enable
       - switch.turn_off:
-          id: switch_time_point_4_charge_enable
+          id: switch_time_point_4_grid_charge_enable
       - switch.turn_off:
-          id: switch_time_point_5_charge_enable
+          id: switch_time_point_5_grid_charge_enable
       - switch.turn_off:
-          id: switch_time_point_6_charge_enable
+          id: switch_time_point_6_grid_charge_enable
+
+  # Master switch to control Generator Charge across all 6 time points
+  - platform: template
+    name: "Time of Use All Gen Charge Enable"
+    id: switch_time_of_use_all_gen_charge_enable
+    icon: "mdi:generator-stationary"
+    optimistic: true
+    restore_mode: DISABLED
+    disabled_by_default: true
+    lambda: |-
+      return id(switch_time_point_1_gen_charge_enable).state;
+    turn_on_action:
+      - switch.turn_on:
+          id: switch_time_point_1_gen_charge_enable
+      - switch.turn_on:
+          id: switch_time_point_2_gen_charge_enable
+      - switch.turn_on:
+          id: switch_time_point_3_gen_charge_enable
+      - switch.turn_on:
+          id: switch_time_point_4_gen_charge_enable
+      - switch.turn_on:
+          id: switch_time_point_5_gen_charge_enable
+      - switch.turn_on:
+          id: switch_time_point_6_gen_charge_enable
+    turn_off_action:
+      - switch.turn_off:
+          id: switch_time_point_1_gen_charge_enable
+      - switch.turn_off:
+          id: switch_time_point_2_gen_charge_enable
+      - switch.turn_off:
+          id: switch_time_point_3_gen_charge_enable
+      - switch.turn_off:
+          id: switch_time_point_4_gen_charge_enable
+      - switch.turn_off:
+          id: switch_time_point_5_gen_charge_enable
+      - switch.turn_off:
+          id: switch_time_point_6_gen_charge_enable
 
 number:
   - platform: modbus_controller
