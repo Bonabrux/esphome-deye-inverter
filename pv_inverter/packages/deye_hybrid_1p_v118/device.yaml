@@ -370,6 +370,19 @@ number:
     mode: box
     icon: "mdi:timer-check"
 
+  # ==========================================
+  # HIDDEN RAW CONTROLLER (Address 326)
+  # ==========================================
+  - platform: modbus_controller
+    use_write_multiple: true
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Type Hidden Writer"
+    id: meter_type_raw
+    address: 326
+    value_type: U_WORD
+    # This keeps the component hidden from Home Assistant
+    internal: true
+
 select:
   - platform: modbus_controller
     use_write_multiple: true
@@ -387,18 +400,55 @@ select:
   # ==========================================
   # METER TYPE SELECTION (Address 326, Bits 8-11)
   # ==========================================
-  - platform: modbus_controller
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
+  # ==========================================
+  # TEMPLATE SELECT FOR UI (Meter Type)
+  # ==========================================
+  - platform: template
     name: "Meter Type"
-    address: 326
-    bitmask: 0x0F00  # Isolates bits 8, 9, 10 and 11
-    value_type: U_WORD
+    id: meter_type_select
     entity_category: config
     icon: "mdi:gauge"
-    optionsmap:
-      "None / Disabled": 0
-      "Eastron SDM630 (3-Phase)": 1
-      "Chint DTSU666 (3-Phase)": 2
-      "Eastron SDM230 (1-Phase)": 3
-      "Chint DDSU666 (1-Phase)": 4
+    options:
+      - "None / Disabled"
+      - "Eastron SDM630 (3-Phase)"
+      - "Chint DTSU666 (3-Phase)"
+      - "Eastron SDM230 (1-Phase)"
+      - "Chint DDSU666 (1-Phase)"
+    
+    # READ: Extracts bits 8-11, shifts them right by 8 positions, and maps to text
+    lambda: |-
+      if (isnan(id(meter_type_raw).state)) {
+        return {};
+      }
+      
+      uint16_t val = (uint16_t)id(meter_type_raw).state;
+      // Mask 0x0F00 isolates bits 8-11. Then we shift 8 positions to the right.
+      uint8_t state = (val & 0x0F00) >> 8; 
+      
+      if (state == 0) return std::string("None / Disabled");
+      if (state == 1) return std::string("Eastron SDM630 (3-Phase)");
+      if (state == 2) return std::string("Chint DTSU666 (3-Phase)");
+      if (state == 3) return std::string("Eastron SDM230 (1-Phase)");
+      if (state == 4) return std::string("Chint DDSU666 (1-Phase)");
+      
+      return {};
+      
+    # WRITE: Reads raw value, clears bits 8-11, adds new shifted bits, and writes back
+    set_action:
+      - number.set:
+          id: meter_type_raw
+          value: !lambda |-
+            uint16_t current_val = (uint16_t)id(meter_type_raw).state;
+            
+            // Mask 0xF0FF (1111 0000 1111 1111) keeps other bits intact and clears bits 8-11
+            uint16_t base_val = current_val & 0xF0FF; 
+            uint16_t new_bits = 0;
+            
+            if (x == "None / Disabled") new_bits = 0;
+            else if (x == "Eastron SDM630 (3-Phase)") new_bits = 1;
+            else if (x == "Chint DTSU666 (3-Phase)") new_bits = 2;
+            else if (x == "Eastron SDM230 (1-Phase)") new_bits = 3;
+            else if (x == "Chint DDSU666 (1-Phase)") new_bits = 4;
+            
+            // Shift the new bits 8 positions to the left and merge with base value
+            return base_val | (new_bits << 8);
