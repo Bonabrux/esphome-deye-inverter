@@ -1,0 +1,137 @@
+# Copyright 2026 BonaBrux
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+sensor:
+  # ==========================================
+  # METER ACTIVE POWER (Addresses 424 - 431)
+  # ==========================================
+
+  # Total Active Power (Negative = Buy, Positive = Sell)
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Total Active Power"
+    register_type: holding
+    address: 424
+    value_type: S_DWORD_R
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+    icon: "mdi:flash"
+
+  # Phase A Active Power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Phase A Active Power"
+    register_type: holding
+    address: 426
+    value_type: S_DWORD_R
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+    icon: "mdi:flash"
+
+  # Phase B Active Power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Phase B Active Power"
+    register_type: holding
+    address: 428
+    value_type: S_DWORD_R
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+    icon: "mdi:flash"
+
+  # Phase C Active Power
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Phase C Active Power"
+    register_type: holding
+    address: 430
+    value_type: S_DWORD_R
+    unit_of_measurement: "W"
+    device_class: power
+    state_class: measurement
+    accuracy_decimals: 0
+    icon: "mdi:flash"
+
+  # ==========================================
+  # METER ENERGY EXPORT / SELL (Addresses 432 - 434)
+  # ==========================================
+
+  # Daily Energy Sold
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Daily Energy Sold"
+    register_type: holding
+    address: 432
+    value_type: U_WORD
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: total_increasing
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+    icon: "mdi:transmission-tower-export"
+
+  # Total (Historical) Energy Sold
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Total Energy Sold"
+    register_type: holding
+    address: 433
+    value_type: U_DWORD_R
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: total_increasing
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+    icon: "mdi:transmission-tower-export"
+
+  # ==========================================
+  # METER ENERGY IMPORT / BUY (Addresses 435 - 437)
+  # ==========================================
+
+  # Daily Energy Bought
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Daily Energy Bought"
+    register_type: holding
+    address: 435
+    value_type: U_WORD
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: total_increasing
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+    icon: "mdi:transmission-tower-import"
+
+  # Total (Historical) Energy Bought
+  - platform: modbus_controller
+    modbus_controller_id: ${modbus_controller_id}
+    name: "Meter Total Energy Bought"
+    register_type: holding
+    address: 436
+    value_type: U_DWORD_R
+    unit_of_measurement: "kWh"
+    device_class: energy
+    state_class: total_increasing
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1
+    icon: "mdi:transmission-tower-import"
