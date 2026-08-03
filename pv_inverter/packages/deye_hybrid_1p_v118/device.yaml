@@ -384,18 +384,18 @@ number:
     internal: true
 
 select:
-  - platform: modbus_controller
-    use_write_multiple: true
-    modbus_controller_id: ${modbus_controller_id}
-    name: "Meter"
-    address: 326
-    value_type: U_WORD
-    entity_category: config
-    icon: "mdi:connection"
-    optionsmap:
-      "Disable": 0
-      "Enable": 1
-      "Generator": 13
+  #- platform: modbus_controller
+  #  use_write_multiple: true
+  #  modbus_controller_id: ${modbus_controller_id}
+  #  name: "Meter"
+  #  address: 326
+  #  value_type: U_WORD
+  #  entity_category: config
+  #  icon: "mdi:connection"
+  #  optionsmap:
+  #    "Disable": 0
+  #    "Enable": 1
+  #    "Generator": 13
 
   # ==========================================
   # METER TYPE SELECTION (Address 326, Bits 8-11)
