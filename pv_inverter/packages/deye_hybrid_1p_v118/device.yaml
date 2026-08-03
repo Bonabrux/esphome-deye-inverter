@@ -217,7 +217,7 @@ text_sensor:
     icon: mdi:chip
     entity_category: diagnostic
     lambda: |-
-      uint16_t value = modbus_controller::word_from_hex_str(x, 0);
+      uint16_t value = modbus::helpers::word_from_hex_str(x, 0);
       switch (value) {
         case 0x0000: return std::string("Unknown");
         case 0x0002:
