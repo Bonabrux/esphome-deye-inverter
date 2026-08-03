@@ -583,14 +583,27 @@ text_sensor:
     register_type: holding
     address: 185
     response_size: 2
+    raw_encode: NONE
     icon: "mdi:battery-sync"
     lambda: |-
-      // Leemos el U_WORD (16 bits)
-      uint16_t status = ((uint16_t)x[0] << 8) | x[1];
-
-      if (status == 0) return std::string("Idle / Standby");
-      if (status == 1) return std::string("Charging");
-      if (status == 2) return std::string("Discharging");
-
-      // Si el inversor arroja un código no documentado, lo capturamos
-      return std::string("Unknown Code: ") + to_string(status);
+      // Join bytes into a 16-bit word
+      uint16_t raw_status = ((uint16_t)x[0] << 8) | x[1];
+      
+      // The actual charge state is only in the Low Byte (bits 0-7)
+      uint8_t charge_state = raw_status & 0x00FF;
+      
+      // The High Byte (bits 8-15) contains internal BMS heartbeat/flags
+      //uint8_t bms_flag = (raw_status >> 8) & 0x00FF;
+      
+      std::string state_str;
+      if (charge_state == 0) state_str = "Idle / Standby";
+      else if (charge_state == 1) state_str = "Charging";
+      else if (charge_state == 2) state_str = "Discharging";
+      else state_str = "Unknown State: " + to_string(charge_state);
+      
+      // Append the hidden BMS flag for diagnostic purposes if it is active
+      //if (bms_flag != 0) {
+      //  return state_str + " (BMS Flag: " + to_string(bms_flag) + ")";
+      //}
+      
+      return state_str;
