@@ -582,17 +582,17 @@ text_sensor:
     icon: "mdi:battery-sync"
     update_interval: 5s
     lambda: |-
-      // Nos aseguramos de que el sensor de potencia (Registro 190) tenga un valor válido
+      // We make sure that the power sensor has a value (Address 190)
       if (isnan(id(battery_power).state)) {
         return std::string("Unknown");
       }
       
       float power = id(battery_power).state;
       
-      // Aplicamos un margen de 15W para evitar falsos estados por el propio consumo del BMS cuando está a flote
-      if (power > 15.0) {
+      // Lets apply a 40W threshold to evade false positives when the BMS is floating
+      if (power > 40.0) {
         return std::string("Discharging");
-      } else if (power < -15.0) {
+      } else if (power < -40.0) {
         return std::string("Charging");
       } else {
         return std::string("Idle / Standby");
