@@ -867,89 +867,372 @@ number:
     mode: box
     icon: "mdi:power-plug"
 
+number:
+  # ==========================================
+  # TIME OF USE 1 (Address 268)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 1 SoC"
-    id: time_of_use_1_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 1 SoC RAW"
+    id: time_of_use_1_soc_raw
+    register_type: holding
     address: 268
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 1 Grid SoC"
+    id: time_of_use_1_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_1_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_1_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_1_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_1_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
 
+  - platform: template
+    name: "Time of Use 1 Gen SoC"
+    id: time_of_use_1_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_1_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_1_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_1_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_1_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
+
+  # ==========================================
+  # TIME OF USE 2 (Address 269)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 2 SoC"
-    id: time_of_use_2_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 2 SoC RAW"
+    id: time_of_use_2_soc_raw
+    register_type: holding
     address: 269
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 2 Grid SoC"
+    id: time_of_use_2_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_2_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_2_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_2_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_2_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
 
+  - platform: template
+    name: "Time of Use 2 Gen SoC"
+    id: time_of_use_2_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_2_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_2_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_2_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_2_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
+
+  # ==========================================
+  # TIME OF USE 3 (Address 270)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 3 SoC"
-    id: time_of_use_3_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 3 SoC RAW"
+    id: time_of_use_3_soc_raw
+    register_type: holding
     address: 270
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 3 Grid SoC"
+    id: time_of_use_3_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_3_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_3_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_3_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_3_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
 
+  - platform: template
+    name: "Time of Use 3 Gen SoC"
+    id: time_of_use_3_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_3_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_3_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_3_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_3_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
+
+  # ==========================================
+  # TIME OF USE 4 (Address 271)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 4 SoC"
-    id: time_of_use_4_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 4 SoC RAW"
+    id: time_of_use_4_soc_raw
+    register_type: holding
     address: 271
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 4 Grid SoC"
+    id: time_of_use_4_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_4_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_4_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_4_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_4_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
 
+  - platform: template
+    name: "Time of Use 4 Gen SoC"
+    id: time_of_use_4_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_4_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_4_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_4_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_4_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
+
+  # ==========================================
+  # TIME OF USE 5 (Address 272)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 5 SoC"
-    id: time_of_use_5_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 5 SoC RAW"
+    id: time_of_use_5_soc_raw
+    register_type: holding
     address: 272
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 5 Grid SoC"
+    id: time_of_use_5_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_5_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_5_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_5_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_5_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
 
+  - platform: template
+    name: "Time of Use 5 Gen SoC"
+    id: time_of_use_5_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_5_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_5_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_5_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_5_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
+
+  # ==========================================
+  # TIME OF USE 6 (Address 273)
+  # ==========================================
   - platform: modbus_controller
     use_write_multiple: true
     modbus_controller_id: ${modbus_controller_id}
-    name: "Time of Use 6 SoC"
-    id: time_of_use_6_soc
-    unit_of_measurement: "%"
+    name: "Time of Use 6 SoC RAW"
+    id: time_of_use_6_soc_raw
+    register_type: holding
     address: 273
+    value_type: U_WORD
+    internal: true
+
+  - platform: template
+    name: "Time of Use 6 Grid SoC"
+    id: time_of_use_6_grid_soc
+    unit_of_measurement: "%"
+    device_class: battery
     min_value: 0
     max_value: 100
     step: 1
-    value_type: U_WORD
     mode: box
     icon: "mdi:battery-clock"
+    # READ: Isolate the Low Byte to get the Grid SoC
+    lambda: |-
+      if (isnan(id(time_of_use_6_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_6_soc_raw).state;
+      return raw & 0x00FF;
+    # WRITE: Keep the High Byte intact and overwrite the Low Byte
+    set_action:
+      - number.set:
+          id: time_of_use_6_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_6_soc_raw).state;
+            uint16_t high_byte = raw & 0xFF00;
+            return high_byte | (uint16_t)x;
+
+  - platform: template
+    name: "Time of Use 6 Gen SoC"
+    id: time_of_use_6_gen_soc
+    unit_of_measurement: "%"
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 1
+    mode: box
+    icon: "mdi:generator-stationary"
+    # READ: Isolate the High Byte and shift it 8 positions right to get the Gen SoC
+    lambda: |-
+      if (isnan(id(time_of_use_6_soc_raw).state)) return {};
+      uint16_t raw = (uint16_t)id(time_of_use_6_soc_raw).state;
+      return (raw >> 8) & 0x00FF;
+    # WRITE: Keep the Low Byte intact and overwrite the High Byte
+    set_action:
+      - number.set:
+          id: time_of_use_6_soc_raw
+          value: !lambda |-
+            uint16_t raw = (uint16_t)id(time_of_use_6_soc_raw).state;
+            uint16_t low_byte = raw & 0x00FF;
+            return low_byte | ((uint16_t)x << 8);
 
   - platform: template
     mode: box
