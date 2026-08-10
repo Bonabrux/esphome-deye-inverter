@@ -883,7 +883,7 @@ number:
 
   - platform: template
     name: "Time of Use 1 Grid SoC"
-    id: time_of_use_1_grid_soc
+    id: time_of_use_1_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
@@ -944,7 +944,7 @@ number:
 
   - platform: template
     name: "Time of Use 2 Grid SoC"
-    id: time_of_use_2_grid_soc
+    id: time_of_use_2_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
@@ -1005,7 +1005,7 @@ number:
 
   - platform: template
     name: "Time of Use 3 Grid SoC"
-    id: time_of_use_3_grid_soc
+    id: time_of_use_3_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
@@ -1066,7 +1066,7 @@ number:
 
   - platform: template
     name: "Time of Use 4 Grid SoC"
-    id: time_of_use_4_grid_soc
+    id: time_of_use_4_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
@@ -1127,7 +1127,7 @@ number:
 
   - platform: template
     name: "Time of Use 5 Grid SoC"
-    id: time_of_use_5_grid_soc
+    id: time_of_use_5_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
@@ -1188,7 +1188,7 @@ number:
 
   - platform: template
     name: "Time of Use 6 Grid SoC"
-    id: time_of_use_6_grid_soc
+    id: time_of_use_6_soc
     unit_of_measurement: "%"
     device_class: battery
     min_value: 0
