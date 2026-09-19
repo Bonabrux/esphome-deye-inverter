@@ -14,7 +14,6 @@
 
 substitutions:
   api_key: ""
-  ota_password: " "
   fallback_password: ""
   wifi_ssid: ""
   wifi_password: ""
