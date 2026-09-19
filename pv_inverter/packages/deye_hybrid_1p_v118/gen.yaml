@@ -33,7 +33,7 @@ sensor:
     id: total_generator_production
     register_type: holding
     address: 92
-    register_count: 4
+    value_type: U_QWORD # 4 registers (92-95), raw bytes are decoded in the lambda
     unit_of_measurement: "kWh"
     device_class: energy
     state_class: "total_increasing"

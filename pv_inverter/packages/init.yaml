@@ -16,6 +16,7 @@ substitutions:
   update_interval: 5s
 
 esphome:
+  min_version: "2026.9.0"
   name: "${name}"
   friendly_name: "${friendly_name}"
   comment: "${device_description} by Lewa-Reka https://github.com/Lewa-Reka/esphome-deye-inverter"
@@ -64,6 +65,7 @@ uart:
 modbus:
   id: modbus_1
   uart_id: modbus_uart
+  turnaround_time: 60ms
 
 modbus_controller:
   - id: ${modbus_controller_id}
@@ -71,7 +73,6 @@ modbus_controller:
     modbus_id: modbus_1
     setup_priority: -10
     update_interval: ${update_interval}
-    command_throttle: 60ms
     offline_skip_updates: 3
 
 debug:

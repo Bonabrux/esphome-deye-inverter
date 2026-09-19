@@ -35,7 +35,7 @@ packages:
     files: pv_inverter/deye_hybrid_1p_lv.yaml
 
 esphome:
-  min_version: "2025.6.0"
+  min_version: "2026.9.0"
   name_add_mac_suffix: true
 
 uart:
