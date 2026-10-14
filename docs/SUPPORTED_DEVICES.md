@@ -6,6 +6,8 @@
    
   ***Single Phase Recommended baud rate: 9600 (default, nothing to change)***
 
+  Firmware 3389-1515 and newer (Modbus protocol V118): use `pv_inverter/deye_hybrid_1p_lv_v118.yaml` instead of `pv_inverter/deye_hybrid_1p_lv.yaml`. It adds per-weekday Time of Use, Time of Use slot modes (Grid/Gen charge, GM, BU, CH), CT/meter configuration (register 326), external meter readings and full alarm/fault decoding. Older firmwares keep using `deye_hybrid_1p_lv.yaml`.
+
 - **Deye SG04LP3** *(Low Voltage)*
 - **Deye SG05LP3** *(Low Voltage)*
 - **Deye SG01HP3** *(High Voltage)*

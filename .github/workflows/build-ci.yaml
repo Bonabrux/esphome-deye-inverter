@@ -20,6 +20,7 @@ jobs:
         file:
           - deye_hybrid_3p_hv
           - deye_hybrid_1p_lv
+          - deye_hybrid_1p_lv_v118
 
         esphome-version:
           - stable
